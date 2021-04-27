@@ -1,0 +1,36 @@
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "coins.h"
+#include "print-coins.h"
+
+// this test client has a maximum of 100 unique coins
+// note that there is no such restriction on the module itself
+const int MAX_COINS = 100;
+
+int main(void) {
+  int coins[100] = {0};
+  int len = 0;
+  if (scanf("%d", &len) != 1) {
+    printf("INVALID INPUT FORMAT\n");
+    return EXIT_SUCCESS;
+  }
+  assert(1 <= len && len <= MAX_COINS);
+  for (int i = 0; i < len; ++i) {
+    if (scanf("%d", &coins[i]) != 1) {
+      printf("INVALID INPUT FORMAT\n");
+      return EXIT_SUCCESS;
+    }
+    assert(coins[i] > 0);
+    assert(i == 0 || coins[i] > coins[i - 1]);
+  }
+  while (1) {
+    int target = 0;
+    if (scanf("%d", &target) != 1) {
+      return EXIT_SUCCESS;
+    }
+    int qty[100] = {0};
+    int result = make_change(coins, len, target, qty);
+    print_coins(coins, len, target, qty, result);
+  }
+}
